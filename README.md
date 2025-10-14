@@ -1,5 +1,5 @@
 # cpu
-- turing complete ben-eater like 16-bit RISC amateur CPU made in Logism Evolution
+- turing complete ben eater-like 16-bit RISC amateur CPU made in Logism Evolution
 - 4-times micro-sequencer (fetch -> decode -> execute -> reset)
 - 1 rom for program code and 1 rom for microcode
 - 2 buses -> data and address bus
