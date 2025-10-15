@@ -28,6 +28,7 @@
 - DCD -> O14 (R0_OUT, R1_OUT, SUB, FLAGS_IN) | CMP R0, R1    | 0x3400
 - DCD -> O15 (JZ, FLAGS_IN, OPR_OUT)	   | JZ addr       | 0x38**
 - DCD -> O16 	  			   | NOP           | 0x3C00
+- (expandable to O63)
 
 # Programs
 ```x86asm
