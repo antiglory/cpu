@@ -4338,6 +4338,10 @@
       <a name="label" val="HALT"/>
       <a name="labelfont" val="SansSerif bold 8"/>
     </comp>
+    <comp lib="0" loc="(3460,3730)" name="Tunnel">
+      <a name="label" val="NOP"/>
+      <a name="labelfont" val="SansSerif plain 10"/>
+    </comp>
     <comp lib="0" loc="(3490,1980)" name="Tunnel">
       <a name="label" val="RAM_OUT"/>
       <a name="labelfont" val="SansSerif bold 8"/>
@@ -6388,7 +6392,9 @@
     <wire from="(3140,1900)" to="(3140,2220)"/>
     <wire from="(3140,2220)" to="(3140,3740)"/>
     <wire from="(3160,1900)" to="(3160,2200)"/>
-    <wire from="(3160,2200)" to="(3160,3740)"/>
+    <wire from="(3160,2200)" to="(3160,3730)"/>
+    <wire from="(3160,3730)" to="(3160,3740)"/>
+    <wire from="(3160,3730)" to="(3460,3730)"/>
     <wire from="(3180,1900)" to="(3180,2180)"/>
     <wire from="(3180,2180)" to="(3180,2830)"/>
     <wire from="(3180,2830)" to="(3180,3030)"/>
