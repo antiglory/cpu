@@ -1,0 +1,23 @@
+-----------------------------ISA---------------------------------------
+DCD -> O0  (resistor/reserved)      	   | BUG 	   | NULL (0x0)
+DCD -> O1  (resistor/reserved) 		   | BUG 	   | NULL (0x0)
+DCD -> O2  (HALT) 		   	   | HLT 	   | 0x0800
+DCD -> O3  (RAM_OUT, R0_IN) 	   	   | LD R0, [addr] | 0x0C**
+DCD -> O4  (RAM_OUT, R1_IN)	   	   | LD R1, [addr] | 0x10**
+DCD -> O5  (OUTPUT_REG_IN, RAM_OUT) 	   | OUT [addr]    | 0x14**
+DCD -> O6  (R0_OUT, RAM_IN)         	   | LD [addr], R0 | 0x18**
+DCD -> O7  (R1_OUT, RAM_IN)   	   	   | LD [addr], R1 | 0x1C**
+DCD -> O8  (OPR_OUT, R0_IN)  	   	   | LD R0, val	   | 0x20**
+DCD -> O9  (OPR_OUT, R1_IN)  	   	   | LD R1, val    | 0x24**
+DCD -> O10 (OPR_OUT, JUMP) 	    	   | JMP addr      | 0x28**
+DCD -> O11 (ALU_OUT, RR_IN)  	   	   | ADD R0, R1    | 0x2C00
+DCD -> O12 (SUB, ALU_OUT, RR_IN)   	   | SUB R0, R1    | 0x3000
+DCD -> O13 (RR_OUT, RAM_IN) 	   	   | LD [addr], RR | 0x34**
+DCD -> O14 (R0_OUT, R1_OUT, SUB, FLAGS_IN) | CMP R0, R1    | 0x3800
+DCD -> O15 (OPR_OUT, JZ, FLAGS_IN)	   | JZ addr       | 0x3C**
+DCD -> O16 (OPR_OUT, SP_IN)		   | LD sp, val    | 0x40**
+DCD -> O17 (UOP -> 0x1)			   | push R0	   | 0x4400
+DCD -> O18 (UOP -> 0x2)			   | push R1       | 0x4800
+DCD -> O19 (NOP)   			   | NOP           | 0x5C00
+(expandable to O63)
+// NOP always at the end of the decoder
