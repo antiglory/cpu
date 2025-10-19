@@ -8,10 +8,13 @@
 
 # v1 - turing complete version
 - [ISA16](source/v1/ISA.txt)
+- [MICROCODE](source/data/core/MICROCODE1)
 ![Blueprint](assets/blueprint_v1.png)
 
 # v2 - current version
 - [ISA16](source/v2/ISA.txt)
+- [MICROCODE](source/data/core/MICROCODE1)
+- [MULTI-HIT MICROCODE](source/data/core/MICROCODE2)
 ![Blueprint](assets/blueprint_v2.png)
 
 # Programs
