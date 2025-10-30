@@ -16,8 +16,9 @@ DCD -> O13 (RR_OUT, RAM_IN) 	   	   | LD [addr], RR | 0x34**
 DCD -> O14 (R0_OUT, R1_OUT, SUB, FLAGS_IN) | CMP R0, R1    | 0x3800
 DCD -> O15 (OPR_OUT, JZ, FLAGS_IN)	   | JZ addr       | 0x3C**
 DCD -> O16 (OPR_OUT, SP_IN)		   | LD sp, val    | 0x40**
-DCD -> O17 (UOP -> 0x1)			   | push R0	   | 0x4400
-DCD -> O18 (UOP -> 0x2)			   | push R1       | 0x4800
+DCD -> O17 (UOP -> 0x0)			   | push R0	   | 0x4400
+DCD -> O18 (UOP -> 0x1)			   | push R1       | 0x4800
 DCD -> O19 (NOP)   			   | NOP           | 0x5C00
 (expandable to O63)
+
 // NOP always at the end of the decoder
