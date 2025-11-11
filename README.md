@@ -1,5 +1,5 @@
 # cpu
-- turing complete ben eater-like 16-bit CISC CPU made in Logism Evolution (v3.9.0)
+- turing complete ben eater-like 16-bit CISC CPU made in Logisim Evolution (v3.9.0)
 - 4 t-stages micro-sequencer (fetch -> decode -> execute -> micro reset) for one-hit instructions
 - +4 t-stages for multi-hit instructions (T2-a, T2-b, T2-c, T2-d, T2-e)
 - 1 rom for program code and 2 roms for microcode
