@@ -1,24 +1,71 @@
------------------------------ISA---------------------------------------
-DCD -> O0  (resistor/reserved)      	   | BUG 	   | NULL (0x0)
-DCD -> O1  (resistor/reserved) 		   | BUG 	   | NULL (0x0)
-DCD -> O2  (HALT) 		   	   | HLT 	   | 0x0800
-DCD -> O3  (RAM_OUT, R0_IN) 	   	   | LD R0, [addr] | 0x0C**
-DCD -> O4  (RAM_OUT, R1_IN)	   	   | LD R1, [addr] | 0x10**
-DCD -> O5  (OUTPUT_REG_IN, RAM_OUT) 	   | OUT [addr]    | 0x14**
-DCD -> O6  (R0_OUT, RAM_IN)         	   | LD [addr], R0 | 0x18**
-DCD -> O7  (R1_OUT, RAM_IN)   	   	   | LD [addr], R1 | 0x1C**
-DCD -> O8  (OPR_OUT, R0_IN)  	   	   | LD R0, val	   | 0x20**
-DCD -> O9  (OPR_OUT, R1_IN)  	   	   | LD R1, val    | 0x24**
-DCD -> O10 (OPR_OUT, JUMP) 	    	   | JMP addr      | 0x28**
-DCD -> O11 (ALU_OUT, RR_IN)  	   	   | ADD R0, R1    | 0x2C00
-DCD -> O12 (SUB, ALU_OUT, RR_IN)   	   | SUB R0, R1    | 0x3000
-DCD -> O13 (RR_OUT, RAM_IN) 	   	   | LD [addr], RR | 0x34**
-DCD -> O14 (R0_OUT, R1_OUT, SUB, FLAGS_IN) | CMP R0, R1    | 0x3800
-DCD -> O15 (OPR_OUT, JZ, FLAGS_IN)	   | JZ addr       | 0x3C**
-DCD -> O16 (OPR_OUT, SP_IN)		   | LD sp, val    | 0x40**
-DCD -> O17 (UOP -> 0x0)			   | push R0	   | 0x4400
-DCD -> O18 (UOP -> 0x1)			   | push R1       | 0x4800
-DCD -> O19 (NOP)   			   | NOP           | 0x5C00
+-----------------------------ISA---------------------------------------------------
+vector      control bits                   | mnemonic                  | opcode
+DCD -> O0   (resistor/reserved)      	   | BUG 	                   | NULL (0x0)
+DCD -> O1   (HALT) 		   	               | HLT 	                   | 0x0400
+DCD -> O2   (RAM_OUT, OPR_OUT, RF_IN) 	   | LD reg (op), [addr (imm)] | 0x08**, 0x088*, 0x09**, 0x098*, 0x0A**, 0x0A8*, 0x0B**, 0x0B8* (for r0 - r7) (same pattern for all opcodes that uses register file)
+DCD -> O3   (OUTPUT_REG_IN, RAM_OUT) 	   | OUT [addr]                | 0x0C**
+DCD -> O4   (RF_OUT, RAM_IN, MAR_OUT)      | ST reg (op), [addr (imm)] | 0x10**
+DCD -> O5   (IMR_OUT, OPR_OUT, RF_IN)  	   | LD reg (op), val (imm)    | 0x14**, 0x148*
+DCD -> O6   (CROSS_BUS, IMR_OUT, JUMP) 	   | JMP addr                  | 0x18**
+DCD -> O7   (OPR_OUT, IMR_A_OUT, RF_B_ENB, RF_B_OUT, RF_A_ALU_OUT, OPS, ALU_OUT, RF_IN)    | ADD reg, reg | 0x1C** (0x1C01)
+DCD -> O8   (OPR_OUT, IMR_A_OUT, RF_B_ENB, RF_B_OUT, RF_A_ALU_OUT, OPS, ALU_OUT, RF_IN)    | SUB reg, reg | 0x20**
+DCD -> O9   (OPR_OUT, IMR_ALU_OUT, RF_B_ENB, RF_B_OUT, RF_A_ALU_OUT, OPS, ALU_OUT, RF_IN)  | MUL reg, reg | 0x24**
+DCD -> O10  (OPR_OUT, IMR_ALU_OUT, RF_B_ENB, RF_B_OUT, RF_A_ALU_OUT, OPS, ALU_OUT, RF_IN)  | DIV reg, reg | 0x28**
+DCD -> O11  (OPR_OUT, IMR_ALU_OUT, RF_B_ENB, RF_B_OUT, RF_A_ALU_OUT, OPS, ALU_OUT, RF_IN)  | REM reg, reg | 0x2C**
+DCD -> O12  (OPR_OUT, IMR_ALU_OUT, RF_B_ENB, RF_B_OUT, RF_A_ALU_OUT, OPS, FLAGS_IN)        | CMP reg, reg | 0x30**
+DCD -> O13  (IMR_OUT, CROSS_BUS, JZ)	   | JZ addr                       | 0x34**
+DCD -> O14  (O14)                          | ST reg (op), [addr (reg-imm)] | 0x38**
+DCD -> O15  (O15) // wip                   | LD reg (op), [addr (reg-imm)] | 0x3C**
+DCD -> O16  () // wip			           | push R0	                   | 0x40**
+DCD -> O17  () // wip			           | pop R0                        | 0x44**
+DCD -> O18  () // wip                      | OUT reg                       | 0x48**
+DCD -> O19  (NOP) // wip   		           | NOP                           | 0x4C00
 (expandable to O63)
+// NOP should be always at the end of the ISA
 
-// NOP always at the end of the decoder
+multi shot instructions:
+1. O14 -> st reg1, [reg2]
+    - T2-a: MAR <- RF[reg2]
+    - T2-b: RF[reg1] -> RAM[MAR]
+
+    - reg1 -> opr (source)
+    - reg2 -> imm (destination)
+
+    - t     (T2-a) -> OP_MAR_IN, RF_B_ENB, RF_B_OUT, CROSS_BUS ->
+    - t + 1 (T2-b) -> OPR_OUT, RF_A_OUT, MAR_OUT, RAM_IN, EOI
+
+2. O15 -> ld reg1, [reg2]
+    - T2-a: MAR <- RF[reg2]
+    - T2-b: RF[reg1] <- RAM[MAR]
+
+    - reg1 -> opr (destination)
+    - reg2 -> imm (source)
+
+    - t     (T2-a) -> ||WIP|| ->
+    - t + 1 (T2-b) -> ||WIP||, EOI
+
+------------ control signals distribution
+bit 23: RF_B_OUT
+bit 22: OP_MAR_IN
+bit 21: REM_ENB
+bit 20: RF_A_ALU_OUT
+bit 19: RF_B_OUT
+bit 18: RF_B_ENB
+bit 17: CROSS_BUS
+bit 16: IMR_A_OUT
+bit 15: JZ
+bit 14: placeholder
+bit 13: ALU_OUT
+bit 12: FLAGS_IN
+bit 11: JUMP
+bit 10: OPR_OUT
+bit 9: MAR_OUT
+bit 8: RF_A_OUT
+bit 7: RAM_IN
+bit 6: OUTPUT_REG_IN
+bit 5: IMR_OUT
+bit 4: RF_IN
+bit 3: RAM_OUT
+bit 2: HALT
+bit 1: NOP
+bit 0: EOI
