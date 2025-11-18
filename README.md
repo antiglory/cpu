@@ -1,6 +1,6 @@
 # cpu
 - turing complete 16-bit harvard-like CISC CPU made in Logisim Evolution (v3.9.0)
-- 4 t-stages micro-sequencer (fetch -> decode -> execute) for one-shot instructions
+- 3 t-stages micro-sequencer (fetch -> decode -> execute) for one-shot instructions
 - +4 t-stages for multi-shot instructions
 - 1 rom for program code and 2 roms for microcode
 - 2 buses -> data bus and address bus
