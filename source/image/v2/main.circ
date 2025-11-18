@@ -5595,10 +5595,6 @@
       <a name="label" val="ALU_OUT"/>
       <a name="labelfont" val="SansSerif bold 8"/>
     </comp>
-    <comp lib="0" loc="(4240,3570)" name="Tunnel">
-      <a name="label" val="SUB"/>
-      <a name="labelfont" val="SansSerif plain 10"/>
-    </comp>
     <comp lib="0" loc="(4240,3690)" name="Tunnel">
       <a name="label" val="JZ"/>
       <a name="labelfont" val="SansSerif plain 10"/>
