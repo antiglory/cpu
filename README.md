@@ -8,12 +8,12 @@
 - 64 possible instructions
 
 # v1 - turing complete version
-- [ISA16](source/v1/ISA.txt)
+- [ISA16](source/image/v1/ISA.txt)
 - [main microcode](source/data/core/MICROCODE1)
 ![Blueprint](assets/blueprint_v1.png)
 
 # v2 - current version
-- [ISA16](source/v2/ISA.txt)
+- [ISA16](source/image/v2/ISA.txt)
 - [main microcode](source/data/core/MICROCODE1)
 - [multi-shot microcode](source/data/core/MICROCODE2)
 ![Blueprint](assets/blueprint_v2.png)
