@@ -17,6 +17,5 @@
 - [main microcode](source/data/core/MICROCODE1)
 - [multi-shot microcode](source/data/core/MICROCODE2)
 ![Blueprint](assets/blueprint_v2.png)
-
-# Programs
-- [Increment to overflow](source/data/INC_TO_OF)
+### Programs
+- [Increment to overflow](source/data/programs/INC_TO_OF)
