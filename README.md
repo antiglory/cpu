@@ -47,23 +47,27 @@
 | DCD - O15 | ld reg (op), [addr (reg-imm)] | `0x3C**`                                                                                                 |
 | DCD - O16 | ld reg (op), reg (imm)        | `0x40**`                                                                                                 |
 
+
 1. O0 -> WIP `#UD`
 	- T2-a: (resistor / reserved)
 2. O1 -> hlt
 	- T2-a: HALT
 3. O2 -> ld reg1, [addr]
 	- reg1 -> opr (destination)
+	- addr -> imm (source)
 	- T2-a: MAR <- (PC++)WORD
 	- T2-b: RAM[MAR] -> RF[reg1]
 	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
 	- t + 1 (T2-b) -> MAR_OUT, RAM_OUT, OPR_OUT, RF_IN, EOI
 4. O3 -> out [addr]
+	- addr -> imm (destination)
 	- T2-a: MAR <- (PC++)WORD
 	- T2-b: RAM[MAR] -> OTR
 	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
 	- t + 1 (T2-b) -> MAR_OUT, RAM_OUT, OUTPUT_REG_IN, EOI
 5. O4 -> st reg1, [addr]
 	- reg1 -> opr (source)
+	- addr -> imm (destination)
 	- T2-a: MAR <- (PC++)WORD
 	- T2-b: RF[reg1] -> RAM[MAR]
 	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
@@ -82,28 +86,28 @@
 	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
 	- t + 1 (T2-b) -> MAR_OUT, JUMP, EOI
 8. O7 -> add reg1, reg2
-	- reg1 -> opr
-	- reg2 -> imm
+	- reg1 -> opr (destination)
+	- reg2 -> imm (source)
 	- T2-a -> reg1 <- ALU(ADD(reg 1, reg2))
 	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
-9. O8 -> sub reg, reg
-	- reg1 -> opr
-	- reg2 -> imm
+9. O8 -> sub reg1, reg2
+	- reg1 -> opr (destination)
+	- reg2 -> imm (source)
 	- T2-a -> reg1 <- ALU(SUB(reg 1, reg2))
 	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
-10. O9 -> mul reg, reg
-	- reg1 -> opr
-	- reg2 -> imm
+10. O9 -> mul reg1, reg2
+	- reg1 -> opr (destination)
+	- reg2 -> imm (source)
 	- T2-a -> reg1 <- ALU(MUL(reg 1, reg2))
 	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
-11. O10 -> div reg, reg
-	- reg1 -> opr
-	- reg2 -> imm
+11. O10 -> div reg1, reg2
+	- reg1 -> opr (destination)
+	- reg2 -> imm (source)
 	- T2-a -> reg1 <- ALU(DIV(reg 1, reg2))
 	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
-12. O11 -> rem reg, reg
-	- reg1 -> opr
-	- reg2 -> imm
+12. O11 -> rem reg1, reg2
+	- reg1 -> opr (destination)
+	- reg2 -> imm (source)
 	- T2-a -> reg1 <- ALU(DIV(reg 1, reg2))
 	- t (T2-a) -> ALU_OPS, REM_ENB, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
 13. O12 -> cmp reg, reg
