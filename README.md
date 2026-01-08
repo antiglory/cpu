@@ -44,6 +44,96 @@
 | DCD - O15 | ld reg (op), [addr (reg-imm)] | `0x3C**`                                                                                                 |
 | DCD - O16 | ld reg (op), reg (imm)        | `0x40**`                                                                                                 |
 
+1. O0 -> WIP `#UD`
+	- T2-a: (resistor / reserved)
+2. O1 -> hlt
+	- T2-a: HALT
+3. O2 -> ld reg1, [addr]
+	- reg1 -> opr (destination)
+	- T2-a: MAR <- (PC++)WORD
+	- T2-b: RAM[MAR] -> RF[reg1]
+	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
+	- t + 1 (T2-b) -> MAR_OUT, RAM_OUT, OPR_OUT, RF_IN, EOI
+4. O3 -> out [addr]
+	- T2-a: MAR <- (PC++)WORD
+	- T2-b: RAM[MAR] -> OTR
+	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
+	- t + 1 (T2-b) -> MAR_OUT, RAM_OUT, OUTPUT_REG_IN, EOI
+5. O4 -> st reg1, [addr]
+	- reg1 -> opr (source)
+	- T2-a: MAR <- (PC++)WORD
+	- T2-b: RF[reg1] -> RAM[MAR]
+	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
+	- t + 1 (T2-b) -> OPR_OUT, RF_A_OUT, MAR_OUT, RAM_IN, EOI
+6. O5 -> ld reg1, val
+	- val -> imm (source)
+	- reg1 -> opr (destination)
+	- T2-a -> IMR <- (PC++)WORD
+	- T2-b -> IMR -> RF[reg1]
+	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, OP_IMR_IN
+	- t + 1 (T2-b) -> IMR_OUT, OPR_OUT, RF_IN, EOI
+7. O6 -> jmp addr
+	- addr -> imm (destination)
+	- T2-a -> MAR <- (PC++)WORD
+	- T2-b -> JMP[MAR]
+	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
+	- t + 1 (T2-b) -> MAR_OUT, JUMP, EOI
+8. O7 -> add reg1, reg2
+	- reg1 -> opr
+	- reg2 -> imm
+	- T2-a -> reg1 <- ALU(ADD(reg 1, reg2))
+	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
+9. O8 -> sub reg, reg
+	- reg1 -> opr
+	- reg2 -> imm
+	- T2-a -> reg1 <- ALU(SUB(reg 1, reg2))
+	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
+10. O9 -> mul reg, reg
+	- reg1 -> opr
+	- reg2 -> imm
+	- T2-a -> reg1 <- ALU(MUL(reg 1, reg2))
+	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
+11. O10 -> div reg, reg
+	- reg1 -> opr
+	- reg2 -> imm
+	- T2-a -> reg1 <- ALU(DIV(reg 1, reg2))
+	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
+12. O11 -> rem reg, reg
+	- reg1 -> opr
+	- reg2 -> imm
+	- T2-a -> reg1 <- ALU(DIV(reg 1, reg2))
+	- t (T2-a) -> ALU_OPS, REM_ENB, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, ALU_OUT, RF_IN, EOI
+13. O12 -> cmp reg, reg
+	- reg1 -> opr
+	- reg2 -> imm
+	- T2-a -> reg1 <- ALU(SUB(reg 1, reg2))
+	- t (T2-a) -> ALU_OPS, RF_A_ALU_OUT, RF_B_ENB, RF_B_ALU_OUT, IMR_RF_OUT, OPR_OUT, FLAGS_IN, EOI
+14. O13 -> jz addr
+	- addr -> imm (destination)
+	- T2-a -> MAR <- (PC++)WORD
+	- T2-b -> JMP[MAR]
+	- t     (T2-a) -> OP_COUNTER_ENB, OP_ROM_OUT, CROSS_BUS1, OP_MAR_IN
+	- t + 1 (T2-b) -> MAR_OUT, JZ, EOI
+15. O14 -> st reg1, [reg2]
+    - reg1 -> opr (source)
+    - reg2 -> imm (destination)
+    - T2-a: MAR <- RF[reg2]
+    - T2-b: RF[reg1] -> RAM[MAR]
+    - t     (T2-a) -> OP_MAR_IN, RF_B_ENB, RF_B_OUT, CROSS_BUS ->
+    - t + 1 (T2-b) -> OPR_OUT, RF_A_OUT, MAR_OUT, RAM_IN, EOI
+16. O15 -> ld reg1, [reg2]
+    - reg1 -> opr (destination)
+    - reg2 -> imm (source)
+    - T2-a: MAR <- RF[reg2]
+    - T2-b: RF[reg1] <- RAM[MAR]
+    - t     (T2-a) -> OP_MAR_IN, RF_B_ENB, RF_B_OUT, CROSS_BUS ->
+    - t + 1 (T2-b) -> MAR_OUT, RAM_OUT, OPR_OUT, RF_A_IN, EOI
+17. O16 -> ld reg1, reg2
+	- reg1 -> opr (destination)
+	- reg2 -> imm (source)
+	- T2-a: RF[reg1] <- RF[reg2]
+	- t (T2-a) -> RF_INTERNAL_OP, IMR_RF_OUT, B_ENB, B_OUT, OPR_OUT, RF_IN, EOI
+
 - [FSM microcode](source/data/core/MICROCODE1)
 - [microcode](source/data/core/MICROCODE2)
 ![Blueprint](assets/blueprint_v2.png)
