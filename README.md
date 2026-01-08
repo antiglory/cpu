@@ -17,6 +17,9 @@
 ![Blueprint](assets/blueprint_v1.png)
 
 # v2 - current version
+- [FSM microcode](source/data/core/MICROCODE1)
+- [microcode](source/data/core/MICROCODE2)
+![Blueprint](assets/blueprint_v2.png)
 ## ISA
 | opcode     | operand 1 | flag/IMM_EXT | immediate/operand 2 |
 | ---------- | --------- | ------------ | ------------------- |
@@ -134,8 +137,5 @@
 	- T2-a: RF[reg1] <- RF[reg2]
 	- t (T2-a) -> RF_INTERNAL_OP, IMR_RF_OUT, B_ENB, B_OUT, OPR_OUT, RF_IN, EOI
 
-- [FSM microcode](source/data/core/MICROCODE1)
-- [microcode](source/data/core/MICROCODE2)
-![Blueprint](assets/blueprint_v2.png)
 ### Programs
 - [Increment to overflow](source/data/programs/INC_TO_OF)
