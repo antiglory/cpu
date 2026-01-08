@@ -11,8 +11,9 @@
 - 64 possible instructions
 
 # v1 - turing complete version
+- non microcoded decoder
 - [ISA16](source/image/v1/ISA.txt)
-- [main microcode](source/data/core/MICROCODE1)
+- [FSM microcode](source/data/core/MICROCODE1)
 ![Blueprint](assets/blueprint_v1.png)
 
 # v2 - current version
