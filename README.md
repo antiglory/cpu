@@ -137,5 +137,36 @@
 	- T2-a: RF[reg1] <- RF[reg2]
 	- t (T2-a) -> RF_INTERNAL_OP, IMR_RF_OUT, B_ENB, B_OUT, OPR_OUT, RF_IN, EOI
 
+control signals distribution
+```
+bit 27: CROSS_BUS2
+bit 26: OP_COUNTER_ENB
+bit 25: OP_ROM_OUT
+bit 24: OP_IMR_IN
+bit 23: RF_B_OUT
+bit 22: OP_MAR_IN
+bit 21: REM_ENB
+bit 20: RF_A_ALU_OUT
+bit 19: RF_B_ALU_OUT
+bit 18: RF_B_ENB
+bit 17: CROSS_BUS
+bit 16: IMR_RF_OUT
+bit 15: JZ
+bit 14: RF_INTERNAL_OP
+bit 13: ALU_OUT
+bit 12: FLAGS_IN
+bit 11: JUMP
+bit 10: OPR_OUT
+bit 9: MAR_OUT
+bit 8: RF_A_OUT
+bit 7: RAM_IN
+bit 6: OUTPUT_REG_IN
+bit 5: IMR_OUT
+bit 4: RF_IN
+bit 3: RAM_OUT
+bit 2: HALT
+bit 1: NOP
+bit 0: EOI
+```
 ### Programs
 - [Increment to overflow](source/data/programs/INC_TO_OF)
