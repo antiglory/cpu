@@ -1,6 +1,7 @@
 # cpu
 - homemade
 - turing complete 16-bit Von Neumann-like CISC CPU made in Logisim Evolution (v3.9.0)
+- single-cycle
 - 1 rom for program code and 2 roms for microcode (FSM and decoding)
 - 2 main buses -> data bus and address bus
 - 1 16-bit register file holding 7 general purpose registers and SP
